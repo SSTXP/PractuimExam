@@ -5,17 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 
 class MainActivity2 : AppCompatActivity() {
+    private val days = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    private val morningTimes = Array(7) { 0 }
+    private val afternoonTimes = Array(7) { 0 }
+    private val notes = Array(7) { "" }
 
-    private val days =
-        arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
-    private val min = Array(7) { 0 }
-    private val max = Array(7) { 0 }
-    private val condition = Array(7) { "" }
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+
+  override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
@@ -27,60 +29,60 @@ class MainActivity2 : AppCompatActivity() {
         val conditionWeather : EditText = findViewById(R.id.conditionWeather)
 
 
+
+
+
         splashScreen.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        clearButton.setOnClickListener {
-          minValues.text.clear()
-          maxValues.text.clear()
-          conditionWeather.text.clear()
+         clearButton.setOnClickListener {
+           minValues.text.clear()
+           maxValues.text.clear()
+           conditionWeather.text.clear()
 
-        }
+         }
 
-       moveScreen3.setOnClickListener {
-            if (validateInputs()) {
-                val intent = Intent(this,MainActivity3 ::class.java)
-                intent.putExtra("Min values", min )
-                intent.putExtra("Max values", max )
-                intent.putExtra("weather condition", condition )
-                startActivity(intent)
+
+      moveScreen3.setOnClickListener {
+          val intent = Intent(this, MainActivity3::class.java)
+          startActivity(intent)
+      }
+
+  }
+
+    private fun validateInputs(): Boolean {
+        for (i in days.indices) {
+            val minId = resources.getIdentifier("${days[i].toLowerCase()}_morning", "id", packageName)
+            val maxId = resources.getIdentifier("${days[i].toLowerCase()}_afternoon", "id", packageName)
+            val conditionId = resources.getIdentifier("${days[i].toLowerCase()}_note", "id", packageName)
+
+            val minText = findViewById<EditText>(minId).text.toString()
+            val maxText = findViewById<EditText>(maxId).text.toString()
+            val conditionText = findViewById<EditText>(conditionId).text.toString()
+
+            if (minText.isEmpty() || maxText.isEmpty() || !minText.isDigitsOnly() || !maxText.isDigitsOnly()) {
+                Toast.makeText(this, "Error: Use minutes for time spent on device", Toast.LENGTH_SHORT).show()
+                return false
             }
-       }
+
+            morningTimes[i] = minText.toInt()
+            afternoonTimes[i] = maxText.toInt()
+            notes[i] = conditionText
+        }
+        return true
     }
 
- private fun validateInputs(): Boolean {
-    for (i in days.indices) {
-        val minValues = resources.getIdentifier("${days[i].toLowerCase()}_min", "id", packageName)
-        val maxValues = resources.getIdentifier("${days[i].toLowerCase()}_max", "id", packageName)
-        val conditionWeather = resources.getIdentifier("${days[i].toLowerCase()}_condition", "id", packageName)
+    private fun clearInputs() {
+        for (i in days.indices) {
+            val minId = resources.getIdentifier("${days[i].toLowerCase()}_morning", "id", packageName)
+            val maxId = resources.getIdentifier("${days[i].toLowerCase()}_afternoon", "id", packageName)
+            val conditionId = resources.getIdentifier("${days[i].toLowerCase()}_note", "id", packageName)
 
-        val morningText = findViewById <EditText>(minValues).text.toString()
-        val afternoonText = findViewById<EditText>(maxValues).text.toString()
-        val noteText = findViewById<EditText>(conditionWeather).text.toString()
-
-        if (morningText.isEmpty() || afternoonText.isEmpty() || !morningText.isDigitsOnly() || !afternoonText.isDigitsOnly()) {
-            Toast.makeText(this, "input temperature ", Toast.LENGTH_LONG).show()
-            return false
+            findViewById<EditText>(minId).text.clear()
+            findViewById<EditText>(maxId).text.clear()
+            findViewById<EditText>(conditionId).text.clear()
         }
 
-        min [i] = morningText.toInt()
-        max[i] = afternoonText.toInt()
-        condition[i] = noteText
     }
-    return true
-}
-
-private fun clearInputs() {
-    for (i in days.indices) {
-        val morningId = resources.getIdentifier("${days[i].toLowerCase()}_morning", "id", packageName)
-        val afternoonId = resources.getIdentifier("${days[i].toLowerCase()}_afternoon", "id", packageName)
-        val noteId = resources.getIdentifier("${days[i].toLowerCase()}_note", "id", packageName)
-
-        findViewById<EditText>(morningId).text.clear()
-        findViewById<EditText>(afternoonId).text.clear()
-        findViewById<EditText>(noteId).text.clear()
-    }
-
-}
-}
+ }

@@ -1,17 +1,62 @@
 package com.example.practuimexam
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 
 class MainActivity3 : AppCompatActivity() {
 
-    val morningTimes = intent.getIntArrayExtra("morningTimes") ?: return
-    val afternoonTimes = intent.getIntArrayExtra("afternoonTimes") ?: return
-    val notes = intent.getStringArrayExtra("notes") ?: return
+
+    @SuppressLint("WrongViewCast", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
 
+        val returnButton : Button = findViewById(R.id.returnButton)
+        returnButton.setOnClickListener {
+            val intent = Intent(this, MainActivity3::class.java)
+            startActivity(intent)
+        }
 
+
+        val min = intent.getIntArrayExtra("min") ?: return
+        val max = intent.getIntArrayExtra("max") ?: return
+        val condition = intent.getStringArrayExtra("condition") ?: return
+
+
+        val layoutTable: TableLayout = findViewById(R.id.layoutTable)
+        var avgtemp
+        = 0
+
+        for (i in min.indices) {
+            val row = TableRow(this)
+            row.addView(createTextView(days[i]))
+            row.addView(createTextView(min[i].toString()))
+            row.addView(createTextView(max[i].toString()))
+            row.addView(createTextView(condition[i]))
+
+            layoutTable.addView(row)
+
+            avgtemp += min[i] + max[i] / 2
+        }
+
+        val avgTemp: TextView = findViewById(R.id.avgTemp)
+        avgTemp.text = "average temp: $avgtemp"
+
+    }
+
+    private fun createTextView(text: String): TextView {
+        val textView = TextView(this)
+        textView.text = text
+        return textView
+    }
+
+    companion object {
+        private val days = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
     }
 }
