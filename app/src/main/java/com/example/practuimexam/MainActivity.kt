@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
         exitButton.setOnClickListener {
             finish()
-            //will close the application
         }
 
         proceedButton.setOnClickListener {

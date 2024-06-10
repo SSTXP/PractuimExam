@@ -19,7 +19,7 @@ class MainActivity3 : AppCompatActivity() {
 
         val returnButton : Button = findViewById(R.id.returnButton)
         returnButton.setOnClickListener {
-            val intent = Intent(this, MainActivity3::class.java)
+            val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
         }
 
@@ -29,7 +29,7 @@ class MainActivity3 : AppCompatActivity() {
         val condition = intent.getStringArrayExtra("condition") ?: return
 
 
-        val layoutTable: TableLayout = findViewById(R.id.layoutTable)
+        var layoutTable: TableLayout = findViewById(R.id.layoutTable)
         var avgtemp
         = 0
 
@@ -43,6 +43,7 @@ class MainActivity3 : AppCompatActivity() {
             layoutTable.addView(row)
 
             avgtemp += min[i] + max[i] / 2
+            //to get average temperature add min and max values then divide by 2
         }
 
         val avgTemp: TextView = findViewById(R.id.avgTemp)

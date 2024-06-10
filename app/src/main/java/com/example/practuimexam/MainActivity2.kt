@@ -5,15 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 
 class MainActivity2 : AppCompatActivity() {
     private val days = arrayOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
-    private val morningTimes = Array(7) { 0 }
-    private val afternoonTimes = Array(7) { 0 }
-    private val notes = Array(7) { "" }
+    private val min = Array(7) {0}
+    private val max = Array(7) {0}
+    private val condition = Array(7){""}
 
 
 
@@ -40,6 +41,7 @@ class MainActivity2 : AppCompatActivity() {
            minValues.text.clear()
            maxValues.text.clear()
            conditionWeather.text.clear()
+             //clear text from all edittext blocks
 
          }
 
@@ -47,6 +49,8 @@ class MainActivity2 : AppCompatActivity() {
       moveScreen3.setOnClickListener {
           val intent = Intent(this, MainActivity3::class.java)
           startActivity(intent)
+          //move to third screen
+
       }
 
   }
@@ -62,22 +66,23 @@ class MainActivity2 : AppCompatActivity() {
             val conditionText = findViewById<EditText>(conditionId).text.toString()
 
             if (minText.isEmpty() || maxText.isEmpty() || !minText.isDigitsOnly() || !maxText.isDigitsOnly()) {
-                Toast.makeText(this, "Error: Use minutes for time spent on device", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "input minimum and maximum temperatures", Toast.LENGTH_SHORT).show()
                 return false
+                // if incorrect value is input an error message will pop up
             }
 
-            morningTimes[i] = minText.toInt()
-            afternoonTimes[i] = maxText.toInt()
-            notes[i] = conditionText
+            min[i] = minText.toInt()
+            max[i] = maxText.toInt()
+            condition[i] = conditionText
         }
         return true
     }
 
     private fun clearInputs() {
         for (i in days.indices) {
-            val minId = resources.getIdentifier("${days[i].toLowerCase()}_morning", "id", packageName)
-            val maxId = resources.getIdentifier("${days[i].toLowerCase()}_afternoon", "id", packageName)
-            val conditionId = resources.getIdentifier("${days[i].toLowerCase()}_note", "id", packageName)
+            val minId = resources.getIdentifier("${days[i].toLowerCase()}_min", "id", packageName)
+            val maxId = resources.getIdentifier("${days[i].toLowerCase()}_max", "id", packageName)
+            val conditionId = resources.getIdentifier("${days[i].toLowerCase()}_condition", "id", packageName)
 
             findViewById<EditText>(minId).text.clear()
             findViewById<EditText>(maxId).text.clear()
