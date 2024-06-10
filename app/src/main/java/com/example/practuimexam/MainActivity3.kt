@@ -30,9 +30,8 @@ class MainActivity3 : AppCompatActivity() {
 
 
         var layoutTable: TableLayout = findViewById(R.id.layoutTable)
-        var avgtemp
-        = 0
 
+        var avgtemp = 0
         for (i in min.indices) {
             val row = TableRow(this)
             row.addView(createTextView(days[i]))
